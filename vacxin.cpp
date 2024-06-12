@@ -54,6 +54,13 @@ int cmpVac(Vaccine v1, Vaccine v2);
 // Ham sap xep so luong ton kho moi loai vac xin
 void sortInven(Vaccine vaccine[], int numofVac);
 
+// Ham nhap them vac xin moi 
+void addVac(Vaccine **vaccine, int *numofVac, int newAddvac); // newAddvac la so luong vac xin moi muon nhap
+
+// Ham cap nhat thong tin 1 vac xin da nhap
+void deleteVac(Vaccine **vaccine, int *numofVac, int index); // index la so thu tu cua vac xin 
+
+// Ham xoa thong tin 1 vac xin da nhap
 int main() // ham main
 {
     int numofVac; // So luong loai vac xin
@@ -71,7 +78,9 @@ int main() // ham main
     {
         printf("\n1.Tim kiem vac xin qua ten (Nhap ban phim so 1)");
         printf("\n2.Sap xep vac xin theo so luong ton kho (Nhap ban phim so 2)");
-        printf("\n3.Sap xep vac xin theo han su dung (Nhap ban phim so 3)\n");
+        printf("\n3.Sap xep vac xin theo han su dung (Nhap ban phim so 3)");
+        printf("\n4.Nhap thong tin them vac xin moi (Nhap ban phim so 4)");
+        printf("\n5.Xoa 1 vac xin da nhap (Nhap ban phim so 5)");
         printf("\nHay lua chon hanh dong tiep theo cua ban: ");
         scanf("%d", &choice);
         switch(choice)
@@ -91,8 +100,20 @@ int main() // ham main
                 printf("\nDanh sach vac xin sap xep theo han su dung: ");
                 searchExpiry(vaccine, numofVac);
                 break;
+            case 4:
+                int newAddvac;
+                printf("\nNhap so luong vac xin them moi: ");
+                scanf("%d", &newAddvac);
+                addVac(&vaccine, &numofVac, newAddvac);
+                break;
+            case 5:
+                int index;
+                printf("\nNhap so thu tu cua vac xin muon xoa: ");
+                scanf("%d", &index);
+                deleteVac(&vaccine, &numofVac, index);
+                break;
             default:
-                printf("\nKhong hop le. Hay nhap mot so tu 1 den 3");
+                printf("\nKhong hop le. Hay nhap mot so tu 1 den 5");
                 continue;
         }
         printf("\nBan co muon tiep tuc khong? (Y/N): ");
@@ -184,6 +205,7 @@ void searchVac(Vaccine vaccine[], int numofVac, char *vacSearch)
     {
         if(strcmp(vaccine[i].vacName, vacSearch) == 0)
         {
+            printf("\nSo thu tu: %d", i); // so thu tu trong mang, thuan tiec cho viec tim kiem vac xin de xoa thong tin phia sau
             displayVac(vaccine[i]);
             found = 1;
         }
@@ -246,4 +268,26 @@ void searchExpiry(Vaccine vaccine[], int numofVac)
     {
         printf("\nVac xin: %s - Han su dung(YYYY-MM-DD): %d-%d-%d", vaccine[i].vacName, vaccine[i].expiryDate.year, vaccine[i].expiryDate.month, vaccine[i].expiryDate.day);
     }
+}
+
+void addVac(Vaccine **vaccine, int *numofVac, int newAddvac)
+{
+    *vaccine = (Vaccine *)realloc(*vaccine, (*numofVac + newAddvac) * sizeof(Vaccine));
+    for (int i = 0; i < newAddvac; i++) 
+    {
+        printf("Nhap thong tin cho vac xin thu %d:\n", *numofVac + 1);
+        inputVac(&(*vaccine)[*numofVac]);
+        (*numofVac)++;
+    }
+}
+
+void deleteVac(Vaccine **vaccine, int *numofVac, int index)
+{
+    *numofVac -= 1;
+    for(int i = index; i < *numofVac - 1; i ++ )
+    {
+        (*vaccine)[index] = (*vaccine)[index + 1];
+    }
+    *vaccine = (Vaccine *)realloc(*vaccine, (*numofVac - 1) * sizeof(Vaccine));
+    *numofVac --;
 }
