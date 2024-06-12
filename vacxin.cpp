@@ -291,3 +291,7 @@ void deleteVac(Vaccine **vaccine, int *numofVac, int index)
     *vaccine = (Vaccine *)realloc(*vaccine, (*numofVac - 1) * sizeof(Vaccine));
     *numofVac --;
 }
+
+
+hi hiệp đây
+
